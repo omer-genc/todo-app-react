@@ -1,26 +1,46 @@
 import React from 'react'
 
-function Section() {
+function Section({ todos, setTodos }) {
+
+    const toggleTodo = (id) => {
+        const newTodos = todos.map(item => item.id === id ? { ...item, done: !item.done } : item)
+        setTodos(newTodos)
+    }
+
+    const deleteTodo = (id) => {
+        setTodos(state => state.filter(todo => todo.id !== id))
+    }
+
     return (
-        <section hidden="[count(todo) = 0]" class="main">
+        <section className="main">
 
             <input property="toggleAll" id="toggle-all"
-                class="toggle-all" type="checkbox"
+                className="toggle-all" type="checkbox"
             />
-            <label for="toggle-all">
+            <label htmlFor="toggle-all">
                 Mark all as complete
             </label>
 
-            <ul class="todo-list">
-                <li mv-multiple="todo"
-                    class="[if(done, 'completed')]"
-                    hidden="[(done and activeFilter = 'active') or (!done and activeFilter = 'completed')]">
-                    <div class="view">
-                        <input property="done" class="toggle" type="checkbox" />
-                        <label property="text">Taste JavaScript</label>
-                        <button class="destroy" mv-action="delete(todo)"></button>
-                    </div>
-                </li>
+            <ul className="todo-list">
+                {todos.map(todo =>
+                    <li
+                        key={todo.id + todo.text}
+                        className={todo.done ? "completed" : ""}
+                    >
+                        <div className="view">
+                            <input
+                                onChange={() => { toggleTodo(todo.id) }}
+                                className="toggle" type="checkbox"
+                                checked={todo.done}
+                            />
+                            <label >{todo.text}</label>
+                            <button className="destroy"
+                                onClick={() => deleteTodo(todo.id)}
+                            ></button>
+                        </div>
+                    </li>
+                )}
+
             </ul>
         </section>
     )

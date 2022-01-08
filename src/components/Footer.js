@@ -1,32 +1,43 @@
 import React from 'react'
 
-function Footer() {
+function Footer({ todos, setFilter, filter, setTodos }) {
+    const left = todos.filter(item => item.done === false).length
     return (
-        <footer class="footer">
+        <footer className="footer">
             <meta property="todoDone" content="[count(todo where done)]" />
             <meta property="todoLeft" content="[count(todo where !done)]" />
 
             {/* <!-- This should be `0 items left` by default --> */}
-            <span class="todo-count">
-                <strong >0</strong>
-                <span> items left</span>
+            <span className="todo-count">
+                <strong >{left}</strong>
+                <span>{left <= 1 ? " item left" : " items left"}</span>
             </span>
 
-            <meta property="activeFilter" content="all"/>
-            <ul class="filters">
+            <meta property="activeFilter" content="all" />
+            <ul className="filters">
                 <li>
-                    <a href class="selected">All</a>
+                    <a href="#/" onClick={() => {
+                        setFilter("ALL")
+                    }} className={filter === "ALL" ? "selected" : ""} >All</a>
                 </li>
                 <li>
-                    <a href class="selected">Active</a>
+                    <a href="#/" onClick={() => {
+                        setFilter("ACTIVE")
+                    }} className={filter === "ACTIVE" ? "selected" : ""}>Active</a>
                 </li>
                 <li>
-                    <a href class="'completed', 'selected'">Completed</a>
+                    <a href="#/" onClick={() => {
+                        setFilter("COMPLETED")
+                    }} className={filter === "COMPLETED" ? "selected" : ""}>Completed</a>
                 </li>
             </ul>
             {/* <!-- Hidden if no completed items are left ↓ --> */}
             <button
-                class="clear-completed">
+                type='button'
+                onClick={() => {
+                    setTodos(state => state.filter(item => item.done === false))
+                }}
+                className="clear-completed">
                 Clear completed
             </button>
         </footer>

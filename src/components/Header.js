@@ -1,13 +1,29 @@
-import React from 'react'
+import React, { useState } from 'react'
 
-function Header() {
+function Header({ todos, setTodos }) {
+    const [text, setText] = useState("")
+    const addTodo = (e) => {
+        e.preventDefault()
+        setTodos(state => [...state, {
+            id: Math.random() * 50,
+            text,
+            done: false
+        }])
+        setText("")
+
+    }
     return (
-        <header class="header">
+        <header className="header">
             <h1>todos</h1>
-            <form>
-                <input property="newTodo" class="new-todo"
+            <form onSubmit={addTodo}>
+                <input
+                    value={text}
+                    type="text"
+                    className="new-todo"
                     placeholder="What needs to be done?"
-                    autofocus />
+                    autoFocus
+                    onChange={(e) => setText(e.target.value)}
+                />
             </form>
         </header>
     )
